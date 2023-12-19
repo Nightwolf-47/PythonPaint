@@ -3,9 +3,9 @@ Projekt z pythona
 
 
 ## Temat
-(Jeszcze nie ma)
+Program do rysowania (Paint)
 
 ## Biblioteki
 - PyGame
 - (Gui)
-- ???
+- Pillow
