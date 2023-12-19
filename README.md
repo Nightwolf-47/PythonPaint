@@ -6,6 +6,6 @@ Projekt z pythona
 Program do rysowania (Paint)
 
 ## Biblioteki
-- PyGame
-- (Gui)
-- Pillow
+- pygame
+- pygame_gui (może się zmienić)
+- pillow
