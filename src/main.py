@@ -4,15 +4,27 @@ pygame.init()
 
 from guidefs import *
 
-pygame.display.set_caption('Python Paint')
+import paint
 
-# test_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(100,100,100,100), text="test", manager=manager)
+pygame.display.set_caption('Python Paint')
 
 programRunning = True
 lastFrameTime = 0
 
 def update(dt):
-    pass
+    if pygame.mouse.get_pressed()[0] and not manager.hovering_any_ui_element:
+        x,y = pygame.mouse.get_pos()
+        if x > 150:
+            color = colors[0]
+            x -= 150
+            x = int(x/paint.image_scale)
+            y = int(y/paint.image_scale)
+            if paint.current_tool == "Pencil":
+                color = colors[0]
+                paint.draw((x,y),(color.r,color.g,color.b))
+            elif paint.current_tool == "Eraser":
+                color = colors[1]
+                paint.draw((x,y),(color.r,color.g,color.b))
 
 def keypressed(key):
     pass
@@ -21,10 +33,18 @@ def keyreleased(key):
     pass
 
 def mousepressed(x,y):
-    pass
+    if paint.current_tool == "Flood Fill" and not manager.hovering_any_ui_element:
+        if pygame.mouse.get_pressed()[0]:
+            x,y = pygame.mouse.get_pos()
+            if x > 150:
+                color = colors[0]
+                x -= 150
+                x = int(x/paint.image_scale)
+                y = int(y/paint.image_scale)
+                paint.flood_fill((x,y),(color.r,color.g,color.b))    
 
 def mousereleased(x,y):
-    pass
+    paint.last_draw_point = None
 
 def uievent(event):
     handle_windows(event)
@@ -46,9 +66,10 @@ while programRunning:
         if event.type == pygame.MOUSEBUTTONUP:
             mousereleased(*pygame.mouse.get_pos())
         manager.process_events(event)
-        
     update(dt)
     manager.update(dt)
     window.blit(background,(0,0))
+    if paint.img_surface != None:
+        window.blit(pygame.transform.scale(paint.img_surface,tuple(paint.rendered_imgsize)),(150,0))
     manager.draw_ui(window)
     pygame.display.flip()
