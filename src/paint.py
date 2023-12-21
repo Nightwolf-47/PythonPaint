@@ -17,6 +17,10 @@ current_tool = "Pencil"
 
 brush_size = 1
 
+def get_circle_topleftcorner(xy):
+    half_brush_size = int(brush_size/2) if brush_size > 1 else 0
+    return xy[0]-half_brush_size, xy[1]-half_brush_size
+
 def get_image_scale():
     global image_scale
     imgx, imgy = current_image.size
@@ -34,11 +38,12 @@ def open_image(path):
     try:
         with Image.open(path) as im:
             current_image = Image.new("RGB",im.size,(colors[1].r,colors[1].g,colors[1].b))
-            current_image.paste(im,(0,0),im)
+            current_image.paste(im,(0,0))
         generate_image_from_pil()
         get_image_scale()
         return current_image.size
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 
@@ -71,9 +76,16 @@ def draw(pos,rgb):
     if current_image == None:
         return
     imdraw = ImageDraw.Draw(current_image)
+    bs = brush_size-1
+    circlepos = get_circle_topleftcorner(pos)
+    circlepos = [circlepos[0],circlepos[1],circlepos[0]+bs,circlepos[1]+bs]
     if last_draw_point:
-        imdraw.line([last_draw_point,pos],fill=rgb)
+        circleldp = get_circle_topleftcorner(last_draw_point)
+        circleldp = [circleldp[0],circleldp[1],circleldp[0]+bs,circleldp[1]+bs]
+        imdraw.ellipse(circleldp,rgb,rgb)
+        imdraw.line([last_draw_point,pos],fill=rgb,width=brush_size+1 if brush_size > 1 else 1)
+        imdraw.ellipse(circlepos,rgb,rgb)
     else:
-        imdraw.point([pos],fill=rgb)
+        imdraw.ellipse(circlepos,rgb,rgb)
     last_draw_point = pos
     generate_image_from_pil()

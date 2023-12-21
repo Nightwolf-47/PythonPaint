@@ -25,6 +25,8 @@ def update(dt):
             elif paint.current_tool == "Eraser":
                 color = colors[1]
                 paint.draw((x,y),(color.r,color.g,color.b))
+        else:
+            paint.last_draw_point = None
 
 def keypressed(key):
     pass
