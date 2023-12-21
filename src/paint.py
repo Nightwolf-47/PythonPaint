@@ -58,7 +58,7 @@ def save_image(path):
 
 def new_image(x,y):
     global current_image
-    current_image = Image.new('RGB',(x,y))
+    current_image = Image.new('RGB',(x,y),(colors[1].r,colors[1].g,colors[1].b))
     generate_image_from_pil()
     get_image_scale()
 

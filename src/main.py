@@ -50,6 +50,7 @@ def mousereleased(x,y):
     paint.last_draw_point = None
 
 def uievent(event):
+    handle_newfile_window(event)
     handle_windows(event)
     handle_toolbar(event)
 

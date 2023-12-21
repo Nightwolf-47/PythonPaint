@@ -31,6 +31,34 @@ toolpanel_elements = {
     'save': pygame_gui.elements.UIButton(pygame.Rect(10,360,125,30),"Save",manager,toolpanel,"Save image to a file",visible=0),
 }
 
+newfile_window = None
+newfile_input_elements = []
+
+def get_supported_path(path):
+    filename, extension = os.path.splitext(path)
+    if extension in [".png",".jpg",".bmp",".jpeg"]:
+        return path
+    else:
+        return filename + ".png"
+
+def open_newfile_window():
+    global newfile_window, newfile_input_elements
+    newfile_window = pygame_gui.elements.UIWindow(pygame.Rect(0,0,200,250),manager,"Create new image",object_id="newfile")
+    label1 = pygame_gui.elements.UILabel(pygame.Rect(20,10,125,20),"Width (1-9999)",manager,newfile_window)
+    widthinput = pygame_gui.elements.UITextEntryLine(pygame.Rect(20,30,125,30),manager,newfile_window,object_id="widthinput")
+    label2 = pygame_gui.elements.UILabel(pygame.Rect(20,70,125,20),"Height (1-9999)",manager,newfile_window)
+    heightinput = pygame_gui.elements.UITextEntryLine(pygame.Rect(20,90,125,30),manager,newfile_window,object_id="heightinput")
+    confirmbutton = pygame_gui.elements.UIButton(pygame.Rect(10,140,50,30),"Ok",manager,newfile_window,"Create new image",object_id="newfileconfirm")
+    cancelbutton = pygame_gui.elements.UIButton(pygame.Rect(70,140,80,30),"Cancel",manager,newfile_window,"Go back to previous image",object_id="newfilecancel")
+    widthinput.set_allowed_characters('numbers')
+    widthinput.set_text_length_limit(4)
+    widthinput.set_text("512")
+    heightinput.set_allowed_characters('numbers')
+    heightinput.set_text_length_limit(4)
+    heightinput.set_text("512")
+    newfile_input_elements = [widthinput,heightinput,confirmbutton,cancelbutton]
+    
+
 def initialize_program(imgx,imgy):
     global window, background
     if paint.image_scale > 1:
@@ -61,22 +89,42 @@ def handle_toolbar(event):
         elif event.ui_element == toolpanel_elements['color2']:
             pygame_gui.windows.UIColourPickerDialog(pygame.Rect(0,0,640,480),manager, initial_colour=colors[1], window_title="Choose secondary color...", object_id="color2")
         elif event.ui_element == toolpanel_elements['new']:
-            pass
+            open_newfile_window()
         elif event.ui_element == toolpanel_elements['load']:
-            pygame_gui.windows.UIFileDialog(pygame.Rect(0,0,640,480),manager,"Load file...",{'.png','.jpg','.bmp'},os.path.curdir,object_id="loadfile")
+            pygame_gui.windows.UIFileDialog(pygame.Rect(0,0,640,480),manager,"Load file...",{'.png','.jpg','.bmp','.jpeg'},os.path.curdir,object_id="loadfile")
         elif event.ui_element == toolpanel_elements['save']:
-            pygame_gui.windows.UIFileDialog(pygame.Rect(0,0,640,480),manager,"Save file...",{'.png','.jpg','.bmp'},os.path.curdir,object_id="savefile")
-        else:
-            return
+            pygame_gui.windows.UIFileDialog(pygame.Rect(0,0,640,480),manager,"Save file...",{'.png','.jpg','.bmp','.jpeg'},os.path.curdir,object_id="savefile")
+        
+
+def handle_newfile_window(event):
+    if newfile_window != None:
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == newfile_input_elements[2]:
+                imgx = newfile_input_elements[0].get_text()
+                imgy = newfile_input_elements[1].get_text()
+                imgx = int(imgx) if len(imgx) > 0 else 512
+                imgy = int(imgy) if len(imgy) > 0 else 512
+                paint.new_image(imgx,imgy)
+                initialize_program(imgx,imgy)
+                newfile_window.kill()
+            elif event.ui_element == newfile_input_elements[3]:
+                newfile_window.kill()
+        if event.type == pygame_gui.UI_TEXT_ENTRY_CHANGED:
+            try:
+                result = max(int(event.text),1)
+                event.ui_element.set_text(str(result))
+            except:
+                pass
 
 
 def handle_windows(event):
     if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
+        realpath = get_supported_path(event.text)
         if event.ui_object_id == "savefile":
-            if paint.save_image(event.text):
-                pygame_gui.windows.UIMessageWindow(pygame.Rect(0,0,250,160),"File saved successfully!",manager,window_title="Save File Success")
+            if paint.save_image(realpath):
+                pygame_gui.windows.UIMessageWindow(pygame.Rect(0,0,400,180),f"File {os.path.basename(realpath)} saved successfully!",manager,window_title="Save File Success")
             else:
-                pygame_gui.windows.UIMessageWindow(pygame.Rect(0,0,250,160),"File couldn't be saved!",manager,window_title="Save File Failure")
+                pygame_gui.windows.UIMessageWindow(pygame.Rect(0,0,400,180),f"File {os.path.basename(realpath)} couldn't be saved!",manager,window_title="Save File Failure")
         if event.ui_object_id == "loadfile":
             load_image(event.text)
     if event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
