@@ -20,13 +20,13 @@ def get_circle_topleftcorner(xy):
     half_brush_size = int(brush_size/2) if brush_size > 1 else 0
     return xy[0]-half_brush_size, xy[1]-half_brush_size
 
+# Zooms in small images
 def get_image_scale():
     global image_scale
     imgx, imgy = current_image.size
     image_scale = math.ceil(max(min(640/imgx, 480/imgy), 1))
     rendered_imgsize[0] = int(imgx*image_scale)
     rendered_imgsize[1] = int(imgy*image_scale)
-    print(image_scale)
 
 def generate_image_from_pil():
     global img_surface
@@ -82,7 +82,7 @@ def draw(pos,rgb):
         circleldp = get_circle_topleftcorner(last_draw_point)
         circleldp = [circleldp[0],circleldp[1],circleldp[0]+bs,circleldp[1]+bs]
         imdraw.ellipse(circleldp,rgb,rgb)
-        imdraw.line([last_draw_point,pos],fill=rgb,width=brush_size+1 if brush_size > 1 else 1)
+        imdraw.line([last_draw_point,pos],fill=rgb,width=brush_size+1 if brush_size > 1 else brush_size)
         imdraw.ellipse(circlepos,rgb,rgb)
     else:
         imdraw.ellipse(circlepos,rgb,rgb)

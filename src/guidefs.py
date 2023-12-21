@@ -44,6 +44,11 @@ def initialize_program(imgx,imgy):
     background = pygame.Surface((winx,winy))
     toolpanel_elements['save'].visible = True
 
+def load_image(path):
+    imgsize = paint.open_image(path)
+    if imgsize != None:
+        initialize_program(*imgsize)
+
 def handle_toolbar(event):
     if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
         if event.ui_element == toolpanel_elements["toolpicker"]:
@@ -73,9 +78,7 @@ def handle_windows(event):
             else:
                 pygame_gui.windows.UIMessageWindow(pygame.Rect(0,0,250,160),"File couldn't be saved!",manager,window_title="Save File Failure")
         if event.ui_object_id == "loadfile":
-            imgsize = paint.open_image(event.text)
-            if imgsize != None:
-                initialize_program(*imgsize)
+            load_image(event.text)
     if event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
         if event.ui_object_id == "color1":
             colors[0] = event.colour
