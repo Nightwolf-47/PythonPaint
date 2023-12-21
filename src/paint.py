@@ -8,7 +8,6 @@ current_image = None
 img_surface = None
 image_scale = 1
 rendered_imgsize = [640,480]
-imdraw = None
 last_draw_point = None
 
 colors = [pygame.Color(0,0,0), pygame.Color(255,255,255)]
@@ -38,7 +37,7 @@ def open_image(path):
     try:
         with Image.open(path) as im:
             current_image = Image.new("RGB",im.size,(colors[1].r,colors[1].g,colors[1].b))
-            current_image.paste(im,(0,0))
+            current_image.paste(im,(0,0),im.convert("RGBA"))
         generate_image_from_pil()
         get_image_scale()
         return current_image.size
