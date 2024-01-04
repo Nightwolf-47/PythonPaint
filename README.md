@@ -1,9 +1,14 @@
-# PythonProject
-Projekt z pythona
+## PythonPaint
+Program do rysowania typu Paint.  
 
+Program jest w języku angielskim.  
 
-## Temat
-Program do rysowania (Paint)
+## Możliwości
+- Wczytywanie i zapisywanie obrazów w formatach PNG, JPEG i BMP
+- Tworzenie nowych obrazów o określonym rozmiarze
+- 3 narzędzia: ołówek, gumka i wypełnienie kolorem (flood fill)
+- Kolor podstawowy (ołówek i wypełnienie) oraz kolor drugorzędny (gumka)
+- Zmiana rozmiaru pędzla (ołówek i gumka)
 
 ## Biblioteki
 - pygame
