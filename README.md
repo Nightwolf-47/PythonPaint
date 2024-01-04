@@ -7,5 +7,5 @@ Program do rysowania (Paint)
 
 ## Biblioteki
 - pygame
-- pygame_gui (może się zmienić)
+- pygame_gui
 - pillow
