@@ -134,3 +134,5 @@ def handle_windows(event):
         if event.ui_object_id == "color2":
             colors[1] = event.colour
             toolpanel_elements["color2"].set_text(color_to_hexstring(colors[1]))
+
+load_image(os.path.join(os.path.dirname(os.path.abspath(paint.__file__)),"res","title.png"))

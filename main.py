@@ -7,7 +7,6 @@ from guidefs import *
 import paint
 
 pygame.display.set_caption('Python Paint')
-load_image("res/title.png")
 
 programRunning = True
 lastFrameTime = 0
