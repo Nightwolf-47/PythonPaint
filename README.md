@@ -1,16 +1,14 @@
 ## PythonPaint
-Program do rysowania typu Paint.  
+Painting tool made in PyGame. 
 
-Program jest w języku angielskim.  
+## Functionality
+- Loading and saving images in PNG, JPEG and BMP format
+- Creating new images with custom size
+- 3 tools: pencil, eraser and flood fill
+- Primary Color (pencil and flood fill) and Secondary Color (eraser)
+- Multiple brush sizes (pencil and eraser)
 
-## Możliwości
-- Wczytywanie i zapisywanie obrazów w formatach PNG, JPEG i BMP
-- Tworzenie nowych obrazów o określonym rozmiarze
-- 3 narzędzia: ołówek, gumka i wypełnienie kolorem (flood fill)
-- Kolor podstawowy (ołówek i wypełnienie) oraz kolor drugorzędny (gumka)
-- Zmiana rozmiaru pędzla (ołówek i gumka)
-
-## Biblioteki
+## Libraries used
 - pygame
 - pygame_gui
 - pillow
